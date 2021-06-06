@@ -22,6 +22,8 @@ jobs:
           - dmd-latest
           - dmd-2.086.1
           - ldc-latest
+        exclude:
+          - { os: macOS-latest, dc: dmd-2.086.1 }
 
     runs-on: ${{ matrix.os }}
 
@@ -34,21 +36,29 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: 'Build & Test'
+      - name: 'Build'
         run: |
           # Release build
           dub build --parallel -b release
           dub clean --all-packages -q
           # Run tests
-          dub test --root=tests/silly --parallel --coverage
+      - name: 'Test with unit-threaded'
+        if: matrix.dc != 'dmd-2.086.1' && runner.os != 'windows'
+        run:
           dub test --root=tests/unit-threaded --parallel --coverage
+      - name: 'Test with silly'
+        if: matrix.dc != 'dmd-2.086.1'
+        run:
+          dub test --root=tests/silly --parallel --coverage
+      - name: 'Test with d-unit'
+        run:
           dub test --root=tests/d-unit --parallel
-      - name: 'Launch tests with Trial'
-        if: runner.os == 'Linux'
+      - name: 'Tests with Trial'
+        if: runner.os == 'Linux' && matrix.dc != 'dmd-2.086.1'
         run:
           dub run trial:runner@~master
 
       - name: Upload Coverage to Codecov
         # Upload test coverage
-        if: runner.os == 'Linux'
+        if: github.ref == 'refs/heads/master' && runner.os == 'Linux' && matrix.dc == 'dmd-latest'
         run: bash <(curl -s https://codecov.io/bash)
