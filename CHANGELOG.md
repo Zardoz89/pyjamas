@@ -1,3 +1,7 @@
+# v1.0.1
+
+* Pijamas now supports DLang frontend 2.086
+
 # v1.0.0
 
 * Moved unit-tests to an separate foolder to avoid pollute other projects with

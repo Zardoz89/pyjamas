@@ -2,6 +2,10 @@
 layout: default
 title: Changelog
 ---
+# v1.0.1
+
+* Pijamas now supports DLang frontend 2.086
+
 # v1.0.0
 
 * Moved unit-tests to an separate foolder to avoid pollute other projects with
@@ -9,7 +13,8 @@ title: Changelog
 * Launch tests using silly, unit-threaded, trial and dunit.
 * Assertions now throws AssertException that it's an alias to AssertError or to
     unit-threaded UnitTestException;
-
+* Added expect and .to()
+* Now Assertion is a struct
 
 # v0.3.5
 
