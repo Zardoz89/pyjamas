@@ -35,7 +35,7 @@
     }
   },
   "toolchainRequirements": {
-    "dub": ">=1.20.0",
-    "frontend": ">=2.091"
+    "dub": ">=1.14.0",
+    "frontend": ">=2.086"
   }
 }

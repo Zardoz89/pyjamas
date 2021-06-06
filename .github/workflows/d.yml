@@ -20,10 +20,8 @@ jobs:
           - windows-latest
         dc:
           - dmd-latest
-          - dmd-2.091.1
+          - dmd-2.086.1
           - ldc-latest
-        exclude:
-          - { os: macOS-latest, dc: dmd-2.091.1 }
 
     runs-on: ${{ matrix.os }}
 
