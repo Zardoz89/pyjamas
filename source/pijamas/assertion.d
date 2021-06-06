@@ -15,7 +15,7 @@ import std.traits : hasMember, isSomeString, isCallable, isAssociativeArray,
 import pijamas.exception;
 
 /**
- * The function **should** it's an helper or syntax sugar to create the assertation. 
+ * The function **should** it's an helper or syntax sugar to create the assertation.
  * Because of D’s lookup shortcut syntax, one is able to use both `should(obj)` and `obj.should` to
  * get an object wrapped around an Assertion instance
  */
@@ -25,7 +25,7 @@ public Assertion!T should(T)(auto ref T context)
 }
 
 /**
- * The function **expect** it's an helper or syntax sugar to create the assertation. 
+ * The function **expect** it's an helper or syntax sugar to create the assertation.
  * Because of D’s lookup shortcut syntax, one is able to use both `expect(obj)` and `obj.expect` to
  * get an object wrapped around an Assertion instance
  */
@@ -193,9 +193,14 @@ struct Assertion(T)
       string file = __FILE__, size_t line = __LINE__) @trusted
       if (is(T : real) && __traits(isFloating, T) && is(U : real) && __traits(isFloating, U))
   {
-    import std.math : isClose;
     operator = "be approximated equal than";
-    this.ok(isClose(context, other, maxRelDiff, maxAbsDiff), other, file, line);
+    static if (__traits(compiles, { import std.math : isClose; })) {
+      import std.math : isClose;
+      this.ok(isClose(context, other, maxRelDiff, maxAbsDiff), other, file, line);
+    } else {
+      import std.math : approxEqual;
+      this.ok(approxEqual(context, other, maxRelDiff, maxAbsDiff), other, file, line);
+    }
     return context;
   }
 
